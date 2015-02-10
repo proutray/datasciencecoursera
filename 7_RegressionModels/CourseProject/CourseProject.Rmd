@@ -1,0 +1,65 @@
+---
+title: "Is an automatic or manual transmission better for MPG"
+author: "Piyush Routray"
+output: pdf_document
+---
+###Executive Summary
+The task at hand for this analysis is to statistically answer the question whether *automatic transmission or manual transmission provides better miles per gallon run for vehicles*. Methods of analysis include multivariate regressions analysis with two independent variables and exploratory analysis of data. Upon analysis of only the miles per gallon data and transmission type, we can claim that **manual transmission results in better performance in terms of miles per gallon, against the automatic transmission**. The report also clarifies that transmission type cannot be considered as sole parameter to judge as correlations exist between it and other parameters provided in the data. The author considers discussing other parameters beyond the scope of our paper.
+
+###The Dataset.
+We are using the data from the 1974 *Motor Trend* US magazine. It consists of 32 automobiles (1973-74 models) with fuel consumption and 10 aspects of automobile design and performance. The data looks as follows: 
+
+```{r, GetData, cache=TRUE, echo= FALSE}
+library(datasets)
+library(dplyr)
+data(mtcars)
+autodata <- filter(mtcars, am == 0) #Cars with automatic transmission
+autodata <- arrange(autodata, mpg)
+manudata <- filter(mtcars, am == 1) #Cars with manual transmission
+manudata <- arrange(manudata, mpg)
+mtcars$am <- factor(mtcars$am)
+coramcyl<-cor(as.numeric(mtcars$am),mtcars$cyl)
+coramdisp<-cor(as.numeric(mtcars$am),mtcars$disp)
+coramhp<-cor(as.numeric(mtcars$am),mtcars$hp)
+coramdrat<-cor(as.numeric(mtcars$am),mtcars$drat)
+coramwt<-cor(as.numeric(mtcars$am),mtcars$wt)
+coramqsec<-cor(as.numeric(mtcars$am),mtcars$qsec)
+coramvs<-cor(as.numeric(mtcars$am),mtcars$vs)
+coramgear<-cor(as.numeric(mtcars$am),mtcars$gear)
+coramcarb<-cor(as.numeric(mtcars$am),mtcars$carb)
+```
+```{r, mtcars}
+head(mtcars,4)
+```
+
+###Processing of Data.
+The aim of this report is to address the question of performance in terms of miles per gallon run for the two types of transmission. We must change the *class* of 'am' column in the dataset from *numeric* to *factor*. The we can perform **multivariate regression with two independents**. The coefficients of the output can be summarized as follows.
+```{r, processing, cache=TRUE}
+fit <- lm(mpg~am-1,mtcars); summary(fit)$coef
+```
+The above output can be inferred the *mean miles/gallon of vehicles with manual transmission* is 24.39 whereas that for *vehicles with automatic transmission* is around 17.15. This can be verified by 
+```{r, results="hide"}
+mean(autodata$mpg); mean(manudata$mpg)
+```
+
+###Results.
+From the coefficient of summary of the regression fitting we can claim that **manual transmission holds the edge over automatic trasmission** as far as getting best results with *miles per gallon* is considered. We can have a box plot as follows to summarize our results.
+```{r,cache = TRUE, echo = FALSE, fig.height = 3.75}
+boxplot(autodata$mpg, manudata$mpg, 
+        col=c("yellow","light green"), 
+        names = c("Automatic","Manual"), 
+        ylab = "Miles per gallon")
+```
+
+Apart from the above plot, we can also have a residual plot for our regression model.  
+```{r,cache = TRUE, echo = FALSE, fig.height = 5}
+par(mfrow = c(2, 2))
+plot(fit)
+```
+
+###Conclusion  
+Manual transmission provides better result than automatic transmission in terms of miles/gallon run of a vehicle. The correlation of transmission with other variables should however, not be ignored while judging a vehicle.  
+
+###References
+* Regression Models by Brian Caffo, PhD, Roger D. Peng, PhD, Jeff Leek, PhD https://class.coursera.org/regmods-010
+* Henderson and Velleman (1981), Building multiple regression models interactively. Biometrics, 37, 391–411.

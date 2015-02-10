@@ -1,0 +1,12 @@
+library(dplyr)
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+coalSCC <- as.character(SCC$SCC[grepl("Coal",SCC$Short.Name)])
+data <- filter(NEI, SCC %in% coalSCC)
+plot4data <- aggregate(data[4], by=list(data$year), FUN=sum, na.rm=TRUE)
+plot4data$Emissions = plot4data$Emissions/1000 #converting tons to thousand tons.
+yrange = range(300,650)
+plot(plot4data, type = "h", col = "green", ylim = yrange, main = "Total Emission due to coal combustion", xlab = "Year", ylab = "Emission (in thousand tons)" , xaxt = "n", lwd = 10)
+axis(1,plot4data$Group.1)
+dev.copy(png, "plot4.png", width=480, height=480, units="px")
+dev.off()
