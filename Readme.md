@@ -5,7 +5,7 @@ The intention behind this repo is:
 * Saving a copy of my work online. 
 * Some work to show to potential employers who are looking to hire in the field of DataScience.
 
-Some folders are empty because I am currently teking the course or haven't taken them yet but they are part of the specialisation.
+Some folders are empty because I am currently taking the course or haven't taken them yet but they are part of the specialisation.
 
 If you are a student taking the Coursera courses, I would request you to do the work on your own as that would be the only way to benefit. I think almost all of the work here was finished in a day or two each (at max.)    
 Cheers,
